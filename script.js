@@ -9,24 +9,24 @@ let button = document.querySelector("#run");
 let clearButton = document.querySelector("#clear");
 let stepCountLabel = document.querySelector("#count");
 
+//*****************************************************************************************************************************/
 
+let colors = [];
 let tiles = [];
-let tileWidth = 1;
+let tileWidth;
 
-const U = 1;
-const R = 2;
-const D = 3;
-const L = 4;
+const UP = 1;
+const RIGHT = 2;
+const DOWN = 3;
+const LEFT = 4;
 
 let rules;
-let colors = [];
-let index = 0;
-let step = 300;
-let stepCount;
+let stepsPerInterval;
+let stepTotalCount;
 
 let running = false;
 let ant;
-let interval;
+let gameLoopInterval;
 
 class Ant{
 	constructor(x, y, direction){
@@ -37,16 +37,16 @@ class Ant{
 
 	move(){
 		switch(this.direction){
-			case L:
+			case LEFT:
 				this.x--;
 				break;
-			case R:
+			case RIGHT:
 				this.x++;
 				break;
-			case U:
+			case UP:
 				this.y--;
 				break;
-			case D:
+			case DOWN:
 				this.y++;
 				break;
 		}
@@ -68,10 +68,10 @@ class Ant{
 	}
 
 	checkDirection(){
-		if(this.direction > L){
-			this.direction = U;
-		}else if(this.direction < U){
-			this.direction = L;
+		if(this.direction > LEFT){
+			this.direction = UP;
+		}else if(this.direction < UP){
+			this.direction = LEFT;
 		}
 	}
 }
@@ -84,7 +84,7 @@ class Tile{
 	}
 }
 
-function setColors(){
+function setRuleColors(){
 	colors = [];
 	for(let i = 0; i < rules.length; i++){
 		let red = Math.random() * 255;
@@ -107,9 +107,8 @@ function setTiles(){
 	ctx.fill();
 }
 
-function draw(){
-	let i = 0;
-	while(i < step){
+function render(){
+	for(let i = 0; i < stepsPerInterval; i++){
 		let tile;
 		try{
 			tile = tiles[ant.y][ant.x];
@@ -127,31 +126,39 @@ function draw(){
 		ctx.fillStyle = "black";
 		ctx.fillRect(ant.x * tileWidth, ant.y * tileWidth, tileWidth, tileWidth);
 		ctx.fill();
-		i++;
 	}
-	stepCount += parseInt(step);
-	stepCountLabel.innerHTML = "Steps: " + stepCount;
+
+	stepTotalCount += parseInt(stepsPerInterval);
+	stepCountLabel.innerHTML = "Steps: " + stepTotalCount;
 }
 
 function start(){
+	if(ruleInput.value == ""){
+		return;
+	}
+	
 	ctx.clearRect(0, 0, 1610, 900);
-	step = stepInput.value;
+	stepsPerInterval = stepInput.value;
 	rules = ruleInput.value.toUpperCase().trim();
+	
 	let startX = startXInput.value;
 	let startY = startYInput.value;
-	ant = new Ant(startX, startY, U);
+	
+	ant = new Ant(startX, startY, UP);
 	tileWidth = tileWidthInput.value;
-	setColors();
+
+	setRuleColors();
 	setTiles();
-	stepCount = 0;
+
+	stepTotalCount = 0;
 	button.innerHTML = "Stop";
 	button.id = "stop";
-	interval = setInterval(() => draw(), 1);
+	gameLoopInterval = setInterval(() => render(), 1);
 	running = true;
 }
 
 function stop(){
-	clearInterval(interval);
+	clearInterval(gameLoopInterval);
 	button.innerHTML = "Run";
 	button.id = "run";
 	running = false;
@@ -168,25 +175,22 @@ function setInputs(steps, startX, startY, tileWidth){
 	tileWidthInput.value = tileWidth;
 }
 
-
-// ************************************************** Program start ***************************************************
-
 ruleInput.oninput = () => {
-	let list = ruleList.options;
+	let ruleAlternatives = ruleList.options;
 	switch(ruleInput.value){
-		case list[0].value:
+		case ruleAlternatives[0].value:
 			setInputs(10, 270, 125, 3);
 			break;
-		case list[1].value:
+		case ruleAlternatives[1].value:
 			setInputs(1000, 270, 125, 3);
 			break;
-		case list[2].value:
+		case ruleAlternatives[2].value:
 			setInputs(100, 270, 142, 3);
 			break;
-		case list[3].value:
+		case ruleAlternatives[3].value:
 			setInputs(50, 400, 125, 3);
 			break;
-		case list[4].value:
+		case ruleAlternatives[4].value:
 			setInputs(200, 350, 30, 3);
 			break;
 	}	
@@ -203,10 +207,7 @@ button.onclick = () => {
 clearButton.onclick = () => {
 	if(!running){
 		clear();
-		stepCount = 0;
-		stepCountLabel.innerHTML = "Steps: " + stepCount;
+		stepTotalCount = 0;
+		stepCountLabel.innerHTML = "Steps: " + stepTotalCount;
 	}
 };
-
-// LRLRRLRLRLLR - Highway in < 2400 steps
-// LRLRRLRLRL   - Highway in < 26000 steps

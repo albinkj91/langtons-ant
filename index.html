@@ -7,7 +7,7 @@
 </head>
 <body>
 	<div id="controls">
-		<input id="rules" type="text" placeholder="Rules" list="ruleList">
+		<input id="rules" type="text" placeholder="Rules (Down-key for alternatives)" list="ruleList" title="Enter combination of L and R">
 		<datalist id="ruleList">
 			<option value="RL">RL</option>
 			<option value="LLRR">LLRR</option>
@@ -15,10 +15,10 @@
 			<option value="LLRRRLRLRLLR">LLRRRLRLRLLR</option>
 			<option value="RRLLLRLLLRRR">RRLLLRLLLRRR</option>
 		</datalist>
-		<input id="steps" type="text" placeholder="Steps">
-		<input id="start-x" type="text" placeholder="Start X">
-		<input id="start-y" type="text" placeholder="Start Y">
-		<input id="tile-width" type="text" placeholder="Tile Width">
+		<input id="steps" type="text" placeholder="Steps" title="Number of steps per frame">
+		<input id="start-x" type="text" placeholder="Start X" title="Starting x-position of ant">
+		<input id="start-y" type="text" placeholder="Start Y" title="Starting y-position of ant">
+		<input id="tile-width" type="text" placeholder="Tile Width" title="Width of each tile in grid">
 		<button id="run">Run</button>
 		<button id="clear">Clear</button>
 		<h3 id="count"></h3>
