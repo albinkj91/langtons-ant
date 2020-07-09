@@ -1,5 +1,5 @@
 # Langton's Ant
-User interactive implementation of Langton's Ant. Langton's ant is a cellular automaton where a simulated ant moves and colors tiles according to a predefined rule set. https://en.wikipedia.org/wiki/Langton%27s_ant
+User interactive implementation of Langton's Ant. Langton's Ant is a cellular automaton where a simulated ant moves and colors tiles according to a predefined rule set. https://en.wikipedia.org/wiki/Langton%27s_ant
 
 # Input instructions
 Rules: Enter a combination of L's and R's for the ants movement (example: LRRL). To choose from a predefined rule set, press the down-key when the first input field is selected.  
